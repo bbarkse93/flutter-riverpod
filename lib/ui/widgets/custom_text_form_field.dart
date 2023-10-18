@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog/main.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final String hint;
   final bool obscureText;
   final funValidator;
@@ -18,38 +19,76 @@ class CustomTextFormField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void scrollToTop() {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.ease,
+    );
+  }
+
+  void scrollToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.ease,
+    );
+  }
+
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (initValue != null) {
-      controller.text = initValue!;
+    if (widget.initValue != null) {
+      widget.controller.text = widget.initValue!;
     }
-    return KeyboardVisibilityBuilder(builder: (context, visible) {
-      TextFormField(
-        controller: controller,
-        validator: funValidator,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          hintText: "Enter $hint",
-          enabledBorder: OutlineInputBorder(
-            // 3. 기본 TextFormField 디자인
-            borderRadius: BorderRadius.circular(20),
+    return Column(
+      children: [
+        KeyboardVisibilityBuilder(builder: (context, visible) {
+          if (visible) {
+            scrollToBottom();
+          } else {
+            scrollToTop();
+          }
+          return SizedBox();
+        }),
+        TextFormField(
+          controller: widget.controller,
+          validator: widget.funValidator,
+          obscureText: widget.obscureText,
+          decoration: InputDecoration(
+            hintText: "Enter ${widget.hint}",
+            enabledBorder: OutlineInputBorder(
+              // 3. 기본 TextFormField 디자인
+              borderRadius: BorderRadius.circular(20),
+            ),
+            focusedBorder: OutlineInputBorder(
+              // 4. 손가락 터치시 TextFormField 디자인
+              borderRadius: BorderRadius.circular(20),
+            ),
+            errorBorder: OutlineInputBorder(
+              // 5. 에러발생시 TextFormField 디자인
+              borderRadius: BorderRadius.circular(20),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              // 5. 에러가 발생 후 손가락을 터치했을 때 TextFormField 디자인
+              borderRadius: BorderRadius.circular(20),
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            // 4. 손가락 터치시 TextFormField 디자인
-            borderRadius: BorderRadius.circular(20),
-          ),
-          errorBorder: OutlineInputBorder(
-            // 5. 에러발생시 TextFormField 디자인
-            borderRadius: BorderRadius.circular(20),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            // 5. 에러가 발생 후 손가락을 터치했을 때 TextFormField 디자인
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      );
-      return Text(
-        'The keyboard is: ${visible ? 'VISIBLE' : 'NOT VISIBLE'}',
-      );
-    });
+        )
+      ],
+    );
   }
 }

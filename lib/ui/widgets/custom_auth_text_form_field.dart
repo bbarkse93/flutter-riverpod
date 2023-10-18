@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/_core/constants/size.dart';
+import 'package:flutter_blog/main.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-class CustomAuthTextFormField extends StatelessWidget {
+class CustomAuthTextFormField extends StatefulWidget {
   final String text;
   final bool obscureText;
   final funValidator;
@@ -16,18 +18,57 @@ class CustomAuthTextFormField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomAuthTextFormField> createState() => _CustomAuthTextFormFieldState();
+}
+
+class _CustomAuthTextFormFieldState extends State<CustomAuthTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void scrollToTop() {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.ease,
+    );
+  }
+
+  void scrollToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.ease,
+    );
+  }
+
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(text),
+        KeyboardVisibilityBuilder(builder: (context, visible) {
+          if (visible) {
+            scrollToBottom();
+          } else {
+            scrollToTop();
+          }
+          return SizedBox();
+        }),
+        Text(widget.text),
         const SizedBox(height: smallGap),
         TextFormField(
-          controller: controller,
-          validator: funValidator,
-          obscureText: obscureText,
+          controller: widget.controller,
+          validator: widget.funValidator,
+          obscureText: widget.obscureText,
           decoration: InputDecoration(
-            hintText: "Enter $text",
+            hintText: "Enter ${widget.text}",
             enabledBorder: OutlineInputBorder(
               // 3. 기본 TextFormField 디자인
               borderRadius: BorderRadius.circular(20),
