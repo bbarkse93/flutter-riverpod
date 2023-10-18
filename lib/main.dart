@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // TODO 1: Widget이 아닌 곳에서 현재 화면의 context에 접근해주는 객체
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final ScrollController scrollController = ScrollController();
 
 void main() {
   runApp(ProviderScope(child: MyApp()));

@@ -16,34 +16,36 @@ class LoginForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          CustomAuthTextFormField(
-            text: "Username",
-            obscureText: false,
-            funValidator: validateUsername(),
-            controller: _username,
-          ),
-          const SizedBox(height: mediumGap),
-          CustomAuthTextFormField(
-            text: "Password",
-            obscureText: true,
-            funValidator: validatePassword(),
-            controller: _password,
-          ),
-          const SizedBox(height: largeGap),
-          CustomElevatedButton(
-            text: "로그인",
-            funPageRoute: () {
-              if (_formKey.currentState!.validate()) {
-                LoginReqDTO loginReqDTO = LoginReqDTO(username: _username.text, password: _password.text);
-                ref.read(sessionProvider).login(loginReqDTO);
-              }
-            },
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            CustomAuthTextFormField(
+              text: "Username",
+              obscureText: false,
+              funValidator: validateUsername(),
+              controller: _username,
+            ),
+            const SizedBox(height: mediumGap),
+            CustomAuthTextFormField(
+              text: "Password",
+              obscureText: true,
+              funValidator: validatePassword(),
+              controller: _password,
+            ),
+            const SizedBox(height: largeGap),
+            CustomElevatedButton(
+              text: "로그인",
+              funPageRoute: () {
+                if (_formKey.currentState!.validate()) {
+                  LoginReqDTO loginReqDTO = LoginReqDTO(username: _username.text, password: _password.text);
+                  ref.read(sessionProvider).login(loginReqDTO);
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

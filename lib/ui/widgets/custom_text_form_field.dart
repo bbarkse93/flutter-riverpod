@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog/main.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:logger/logger.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hint;
@@ -23,6 +23,7 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -56,14 +57,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     }
     return Column(
       children: [
-        KeyboardVisibilityBuilder(builder: (context, visible) {
-          if (visible) {
-            scrollToBottom();
-          } else {
-            scrollToTop();
-          }
-          return SizedBox();
-        }),
         TextFormField(
           controller: widget.controller,
           validator: widget.funValidator,
@@ -87,7 +80,17 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               borderRadius: BorderRadius.circular(20),
             ),
           ),
-        )
+        ),
+        KeyboardVisibilityBuilder(builder: (context, isVisible) {
+          if (isVisible) {
+            Logger().d("키보드 올라옴");
+            scrollToBottom();
+          } else {
+            Logger().d("키보드 내려감");
+            scrollToTop();
+          }
+          return SizedBox();
+        }),
       ],
     );
   }
