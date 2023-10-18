@@ -60,9 +60,13 @@ class SessionUser {
   }
 
   Future<void> logout() async {
-    // 1. 통신코드
+    this.jwt = null;
+    this.isLogin = false;
+    this.user = null;
+    await secureStorage.delete(key: "jwt");
 
-    // 2. 비즈니스 로직
+    Navigator.pushNamedAndRemoveUntil(mContext!, "/login", (route) => false);
+    print("로그아웃 됨");
   }
 }
 
