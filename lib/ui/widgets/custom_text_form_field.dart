@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String hint;
@@ -21,29 +22,34 @@ class CustomTextFormField extends StatelessWidget {
     if (initValue != null) {
       controller.text = initValue!;
     }
-    return TextFormField(
-      controller: controller,
-      validator: funValidator,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        hintText: "Enter $hint",
-        enabledBorder: OutlineInputBorder(
-          // 3. 기본 TextFormField 디자인
-          borderRadius: BorderRadius.circular(20),
+    return KeyboardVisibilityBuilder(builder: (context, visible) {
+      TextFormField(
+        controller: controller,
+        validator: funValidator,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          hintText: "Enter $hint",
+          enabledBorder: OutlineInputBorder(
+            // 3. 기본 TextFormField 디자인
+            borderRadius: BorderRadius.circular(20),
+          ),
+          focusedBorder: OutlineInputBorder(
+            // 4. 손가락 터치시 TextFormField 디자인
+            borderRadius: BorderRadius.circular(20),
+          ),
+          errorBorder: OutlineInputBorder(
+            // 5. 에러발생시 TextFormField 디자인
+            borderRadius: BorderRadius.circular(20),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            // 5. 에러가 발생 후 손가락을 터치했을 때 TextFormField 디자인
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          // 4. 손가락 터치시 TextFormField 디자인
-          borderRadius: BorderRadius.circular(20),
-        ),
-        errorBorder: OutlineInputBorder(
-          // 5. 에러발생시 TextFormField 디자인
-          borderRadius: BorderRadius.circular(20),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          // 5. 에러가 발생 후 손가락을 터치했을 때 TextFormField 디자인
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-    );
+      );
+      return Text(
+        'The keyboard is: ${visible ? 'VISIBLE' : 'NOT VISIBLE'}',
+      );
+    });
   }
 }
