@@ -14,24 +14,27 @@ class PostDetailBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // todo 3: watch? read?
-    PostDetailModel? model = ref.read(postDetailProvider); // 상태에 접근
-    ref.read(postDetailProvider.notifier); // 창고에 접근 (창고 내부의 메서드를 호출하기 위해)
+    PostDetailModel? model = ref.watch(postDetailProvider); // 상태에 접근 (리턴타입이 PostDetailModel)
+    //ref.read(postDetailProvider.notifier); // 창고에 접근 (창고 내부의 메서드를 호출하기 위해)
+    if (model == null) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      Post post = model.post;
 
-    Post post = model!.post;
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(
-        children: [
-          PostDetailTitle("${post.title}"),
-          const SizedBox(height: largeGap),
-          PostDetailProfile(),
-          PostDetailButtons(),
-          const Divider(),
-          const SizedBox(height: largeGap),
-          PostDetailContent("${post.content}"),
-        ],
-      ),
-    );
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            PostDetailTitle("${post.title}"),
+            const SizedBox(height: largeGap),
+            PostDetailProfile(),
+            PostDetailButtons(),
+            const Divider(),
+            const SizedBox(height: largeGap),
+            PostDetailContent("${post.content}"),
+          ],
+        ),
+      );
+    }
   }
 }

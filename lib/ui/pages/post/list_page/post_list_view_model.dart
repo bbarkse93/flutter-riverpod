@@ -33,7 +33,7 @@ class PostListViewModel extends StateNotifier<PostListModel?> {
     // 통신코드
     SessionUser sessionUser = ref.read(sessionProvider);
 
-    ResponseDTO responseDTO = await PostRepository().fetchPost(sessionUser.jwt!, dto);
+    ResponseDTO responseDTO = await PostRepository().savePost(sessionUser.jwt!, dto);
 
     if (responseDTO.code == 1) {
       Post newPost = responseDTO.data as Post; // dynamic(Post) -> 다운캐스팅
