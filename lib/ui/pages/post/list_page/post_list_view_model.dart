@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PostListModel {
   List<Post> posts;
-
   PostListModel(this.posts);
 }
 
